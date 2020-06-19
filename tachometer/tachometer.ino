@@ -1,5 +1,7 @@
-di#include <DS3231.h>
+#include <DS3231.h>
 #include <SD.h>
+#include<SPI.h>
+DS3231 rtc(SDA,SCL);
 float value=0;
 float rev=0;
 int rpm;
@@ -7,7 +9,7 @@ int oldtime=0;
 int time;
 int sum; 
 int i;
-
+File myFile;
 void isr() 
 {
 rev++;
@@ -19,9 +21,6 @@ Serial.begin(9600);
 attachInterrupt(0,isr,RISING); 
 
 rtc.begin();
-while (!Serial) {
-
-}
 Serial.print("Initializing SD card...");
 if (!SD.begin(10)) {
 Serial.println("initialization failed!");
@@ -32,12 +31,12 @@ Serial.println("initialization done.");
 
 }
 
-char* filename()
+/*char* filename()
 {
     char fname[] = rtc.getDateStr();
     fname.concat(".txt");
     return fname;  
-} 
+} */
 
 void loop()
 {
@@ -62,10 +61,10 @@ if(i == 6)
   Serial.print(rtc.getTimeStr());
   Serial.print(" --> ");
   Serial.println(sum/6);
-  myFile = SD.open(filename(), FILE_WRITE); 
+  myFile = SD.open("test.txt", FILE_WRITE); 
   myFile.println(rtc.getTimeStr());
   myFile.print(" --> ");
-  myFile.print(sum/6)
+  myFile.print(sum/6);
   myFile.close();
   sum=0;
   i=0;
