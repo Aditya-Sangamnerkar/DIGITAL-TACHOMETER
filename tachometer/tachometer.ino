@@ -31,12 +31,12 @@ Serial.println("initialization done.");
 
 }
 
-/*char* filename()
+String filename()
 {
-    char fname[] = rtc.getDateStr();
+    String fname = rtc.getDateStr();
     fname.concat(".txt");
     return fname;  
-} */
+} 
 
 void loop()
 {
