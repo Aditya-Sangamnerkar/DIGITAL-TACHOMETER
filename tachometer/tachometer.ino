@@ -10,6 +10,7 @@ int time;
 int sum; 
 int i;
 File myFile;
+String presentDate;
 void isr() 
 {
 rev++;
@@ -28,19 +29,28 @@ while (1);
 }
 Serial.println("initialization done.");
 
+String presentDate = rtc.getDateStr();
 
 }
 
-String filename()
+/*String filename()
 {
     String fname = rtc.getDateStr();
     fname.concat(".txt");
     return fname;  
-} 
+} */
 
 void loop()
 {
 delay(10000);
+
+if(!presentDate.equals(rtc.getDateStr()))
+{
+ myFile = SD.open("test.txt", FILE_WRITE); 
+ myFile.println(rtc.getDateStr());
+ myFile.close();
+ presentDate = rtc.getDateStr();     
+}
 detachInterrupt(0); 
 time=millis()-oldtime; 
 rpm = (rev/time)*60000;
