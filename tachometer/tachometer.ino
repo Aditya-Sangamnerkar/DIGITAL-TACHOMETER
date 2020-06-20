@@ -30,6 +30,10 @@ while (1);
 Serial.println("initialization done.");
 
 presentDate = rtc.getDateStr();
+myFile = SD.open("test.txt", FILE_WRITE); 
+ myFile.println(rtc.getDateStr());
+ myFile.close();
+
 
 }
 
