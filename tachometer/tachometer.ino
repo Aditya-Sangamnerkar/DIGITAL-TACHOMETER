@@ -29,7 +29,7 @@ while (1);
 }
 Serial.println("initialization done.");
 
-String presentDate = rtc.getDateStr();
+presentDate = rtc.getDateStr();
 
 }
 
