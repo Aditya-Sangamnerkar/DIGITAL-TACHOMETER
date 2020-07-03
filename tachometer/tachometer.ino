@@ -10,6 +10,8 @@ int time;
 int sum; 
 int i;
 File myFile;
+const int green = ;
+const int red = ;
 String presentDate;
 void isr() 
 {
@@ -20,15 +22,19 @@ void setup()
 {
 Serial.begin(9600);
 attachInterrupt(0,isr,RISING); 
+pinMode(green,OUTPUT);
+pinMode(red,OUTPUT);
 
 rtc.begin();
 Serial.print("Initializing SD card...");
 if (!SD.begin(10)) {
 Serial.println("initialization failed!");
-while (1);
+digitalWrite(red,HIGH);
+digitalWrite(green,LOW);
+while(1);
 }
 Serial.println("initialization done.");
-
+digitalWrite(green,HIGH);
 presentDate = rtc.getDateStr();
 myFile = SD.open("test.txt", FILE_WRITE); 
  myFile.println(rtc.getDateStr());
@@ -62,19 +68,22 @@ oldtime=millis();
 rev=0;
 sum+=rpm;
 i++;
+if(sum<0)
+{
+    digitalWrite(green,LOW);
+    while(1)
+    {
+        digitalWrite(red,HIGH);
+        delay(1000);
+        digitalWrite(red,LOW);  
+    }
+}
+
+
+
 if(i == 6)
 {
-  Serial.print(rtc.getDOWStr());
-  Serial.print(" ");
   
- 
-  Serial.print(rtc.getDateStr());
-  Serial.print(" -- ");
-
-  
-  Serial.print(rtc.getTimeStr());
-  Serial.print(" --> ");
-  Serial.println(sum/6);
   myFile = SD.open("test.txt", FILE_WRITE); 
   myFile.println(rtc.getTimeStr());
   myFile.print(" --> ");
@@ -84,6 +93,7 @@ if(i == 6)
   i=0;
   
 }
+
 
 
 attachInterrupt(0,isr,RISING);
