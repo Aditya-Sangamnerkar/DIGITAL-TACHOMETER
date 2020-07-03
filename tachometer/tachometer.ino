@@ -53,7 +53,12 @@ myFile = SD.open("test.txt", FILE_WRITE);
 void loop()
 {
 delay(10000);
-
+if (!SD.begin(10)) {
+Serial.println("card not found");
+digitalWrite(red,HIGH);
+digitalWrite(green,LOW);
+while(1);
+}
 if(!presentDate.equals(rtc.getDateStr()))
 {
  myFile = SD.open("test.txt", FILE_WRITE); 
